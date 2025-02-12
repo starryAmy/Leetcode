@@ -5,6 +5,7 @@
  */
 var timeLimit = function(fn, t) {
   return async function(...args) {
+    // make below teo Promises race to ruturn the one that runs faster
     return Promise.race([
       fn(...args),
       new Promise((_,reject) => {setTimeout(() => {reject("Time Limit Exceed")},t)})
