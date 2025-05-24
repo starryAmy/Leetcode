@@ -1,3 +1,10 @@
+## Table of Contents
+
+- [217 - Contains Duplicate](#217---contains-duplicate)
+- [242 - Valid Anagram](#242---valid-anagram)
+- [1 - Two sum](#1---two-sum)
+- [49 - Group Anagram](#49---group-anagram)
+
 ## 217 - Contains Duplicate
 **brute force** : run each nums in num and then run through the rest nums and compare </br>
 ⏳ **time complexity**: O(n^2) </br>
@@ -46,3 +53,21 @@ nums.sort() # 會直接修改原本的陣列，不會回傳任何陣列
 **Solution**: </br> 
 - **Check the difference**: run through the array and check the difference
 - **Store in the table**: if the diff in hash table, return the indices. Else, store the diff in the hash table
+
+## 49 - Group Anagram
+**brute force** :
+- 建立一個 groups 陣列，每一組是 anagram 群。
+- 遍歷每個字 word，檢查是否能放進某一組（比對是否為 anagram）。
+- 如果找不到，就新開一組。
+⏳ **time complexity**: O(n²·klogk) </br>
+**Solution**: </br> 
+**解題思路** ：對參數進行迴圈，每一個字的array index當成字母的順序
+- 先loop through array
+- 每一個string在loop through，然後計算每一個字母的數量存成array
+- 把array轉換成tuple存到result hash map
+- return hash map中的values
+⏳ **time complexity**: O(n * k) </br>
+```python
+ord(s) - ord("a") # ord()是轉換字母到ASCII碼
+tuple(word) # 可以把array轉化成tuple，就可以當成hash map裡的key
+```
