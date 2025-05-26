@@ -8,7 +8,19 @@
 - [659 - Encode and Decode Strings](#659---encode-and-decode-strings)
 - [238 - Product of Array Itself](#238---product-of-array-itself)
 - [36 - Valid Sudoku](#36---valid-sudoku)
-- [128 - Longest Consecutive Sequence](#128---longest-consecutive-sequence)
+- [128 - Longest Consecutive Sequence](#128---longest-consecutive-sequence) <br/>
+    <br/>
+  Two Pointers
+- [125 - Valid Palindrome](#125---valid-palindrome)
+- [167 - Two Integer Sum II](#167---two-integer-sum-ii)
+- [15 - three Sum](#15---three-sum)
+- [11 - Container With Most Water](#11---container-with-most-water)  <br/>
+ <br/>
+  Sliding Window
+- [121 - Best time to sell and buy stocks](#121---best-time-to-sell-and-buy-stocks)
+- [3 - Longest Substring Without Repeating Characters](#3---longest-substring-without-repeating-characters)
+- [424 - Longest Repeating Character Replacement](#424---longest-repeating-character-replacement)
+- [567 - Permutation in String](#567---permutation-in-string)
 
 ## 217 - Contains Duplicate
 **brute force** : run each nums in num and then run through the rest nums and compare </br>
@@ -192,4 +204,176 @@ def longestConsecutive(nums):
 ```python
 nums_set = set(nums) # no duplicate numbers
 ```
+# Two Pointers 
+- 看到sorted -> 直覺反應two pointers指針法因為sorted讓排序變得有意義
+- 只要你可以明確根據某個條件「排除掉某些不可能是最優解的情況」，就可以用 two pointers。
+- 只要左右移動有“明確方向感”，且能剪掉不必要的組合，你就能用 Two Pointers！
 
+## 125 - Valid Palindrome
+**brute force** :
+- 把array反轉然後比較
+- 雖然反轉array的時間複雜度也是O(n)但卻要浪費空間
+```python
+def isPalindrome(s: str) -> bool:
+    # Step 1: Remove non-alphanumeric characters and convert to lowercase
+    cleaned = ''.join(c.lower() for c in s if c.isalnum())
+
+    # Step 2: Reverse the cleaned string
+    reversed_str = cleaned[::-1]
+
+    # Step 3: Compare original and reversed
+    return cleaned == reversed_str
+```
+⏳ **time complexity**: O(n) </br>
+**Solution**: </br> 
+**解題思路** ：取set，因為查找set的時間複雜度是O(1) while 查找array的時間複雜度是O(n)
+- 先清理原本的string，只留下數字跟英文字母
+- 由兩個指針，一個從左往右移動，一個從右到左移動
+⏳ **time complexity**: O(n) </br>
+```python
+s = "".join(c for c in s if c.isalnum()).lower() # only numbers and english letters will be included
+```
+
+## 167 - Two Integer Sum II
+**brute force** :
+- 跑兩次迴圈相加
+⏳ **time complexity**: O(n^2) </br>
+**Solution**: </br> 
+**解題思路** ：
+- 兩個指針，一個往左走一個往右走
+- 由相加數跟target比大小去決定要往左走還是往右走
+⏳ **time complexity**: O(n) </br>
+
+## 15 - three Sum
+**brute force** :
+- 先loop外迴圈一次
+- 然後裡面再迴圈一次
+- 接著裡面再回圈一次
+⏳ **time complexity**: O(n^3) </br>
+**Solution**: </br> 
+**解題思路** ：
+- 先sort原本的array
+- iterate array，先固定第一個元素，然後對剩下的元素進行指針法
+⏳ **time complexity**: O(nlogn)+O(n^2)= O(n^2) </br>
+
+## 11 - Container With Most Water
+**brute force** :
+- iterate 迴圈 然後裡面再迴圈一次
+⏳ **time complexity**: O(n^2) </br>
+**Solution**: </br> 
+**解題思路** ：
+- 由兩個指針，一個從左往右移動，一個從右到左移動
+- 因為我們的目標是勁量找到最高的邊，所以比較左指針跟右指針
+- 哪個指針指向的邊較短就移動一步，尋找更大的邊
+⏳ **time complexity**: O(n) </br>
+
+# Sliding Window
+- ✨ Sliding Window 是 Two Pointers 的特化版本：專注在處理「一段連續區間的狀態」
+
+## 121 - Best time to sell and buy stocks
+**brute force** :
+- 對於每一天 i：當作「買入」的那天
+- 嘗試在之後的每一天 j 當作「賣出」的那天
+- 計算 prices[j] - prices[i]
+- 記錄最大利潤
+⏳ **time complexity**: O(n^2) </br>
+**Solution**: </br> 
+**解題思路** ：
+- 兩個指針分別從index = 0, 1開始移動
+- 如果右邊的數比較小，就把那天當作left，買入的那一天
+- right持續往右
+⏳ **time complexity**: O(n) </br>
+
+## 3 - Longest Substring Without Repeating Characters
+**brute force** :
+- 對於每個起點 i，從 i+1 到結尾的每個 j
+- 檢查 s[i:j] 是否有重複字元
+- 如果沒有，更新最大長度
+```python
+def lengthOfLongestSubstring(s):
+    max_len = 0
+    n = len(s)
+    for i in range(n):
+        seen = set()
+        for j in range(i, n):
+            if s[j] in seen:
+                break
+            seen.add(s[j])
+            max_len = max(max_len, j - i + 1)
+    return max_len
+```
+⏳ **time complexity**: O(n^2) </br>
+**Solution**: </br> 
+**解題思路** ：
+- 兩個指針分別從index = 0, 1開始移動
+- 如果右指針指向的元素重複，就移動左指針直到沒有重複
+- 不然就移動右指針並計算長度
+⏳ **time complexity**: O(n) </br>
+```python
+char.add(s[r]) # add element to set
+char.remove(s[l]) # remove element from set
+```
+
+## 424 - Longest Repeating Character Replacement
+**brute force** :
+- 枚舉所有子字串 s[i:j]
+- 統計其中出現最多次的字母的次數 max_freq
+- 看這段子字串是否能夠在 k 次 replace 內全變成同一個字母：
+- (j - i + 1) - max_freq <= k
+- 如果可以，更新最大長度
+```python
+def characterReplacement(s, k):
+    max_len = 0
+    n = len(s)
+    for i in range(n):
+        count = [0] * 26
+        max_count = 0
+        for j in range(i, n):
+            idx = ord(s[j]) - ord('A')
+            count[idx] += 1
+            max_count = max(max_count, count[idx])
+            window_len = j - i + 1
+            if window_len - max_count <= k:
+                max_len = max(max_len, window_len)
+    return max_len
+```
+⏳ **time complexity**: O(n^2) </br>
+**Solution**: </br> 
+**解題思路** ：Sliding Window
+- 兩個指針分別從index = 0, 0開始移動
+- 如果不滿足條件，就縮小窗口
+- 不然就移動右指針extend the window
+⏳ **time complexity**: O(n) </br>
+```python
+max(item) # where item can be an array
+```
+
+## 567 - Permutation in String
+**brute force** :
+- 產生 s1 的所有 permutation（排列）
+- 在 s2 中用 sliding window，逐格比對是否有出現過其中一個 permutation
+```python
+from itertools import permutations
+
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        perms = set([''.join(p) for p in permutations(s1)])
+        window_len = len(s1)
+        for i in range(len(s2) - window_len + 1):
+            if s2[i:i+window_len] in perms:
+                return True
+        return False
+
+```
+⏳ **time complexity**: O(n! + m * n) </br>
+**Solution**: </br> 
+**解題思路** ：Sliding Window
+- 先set up 兩個array，array的index是字母的ASC碼，value是出現的次數
+- 在比較兩個array，看有多少個match
+- 開始兩個指針逐步移動，計算array之中元素的次數
+- 同時間要更新是否matches
+⏳ **time complexity**: O(m) where m is the bigger length </br>
+```python
+array2 = [0] * 26 # 一個array裡面26個元素都是0
+ord(s1[i]) - ord("a") # 計算ASC碼
+```
