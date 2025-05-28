@@ -21,7 +21,28 @@
 - [121 - Best time to sell and buy stocks](#121---best-time-to-sell-and-buy-stocks)
 - [3 - Longest Substring Without Repeating Characters](#3---longest-substring-without-repeating-characters)
 - [424 - Longest Repeating Character Replacement](#424---longest-repeating-character-replacement)
-- [567 - Permutation in String](#567---permutation-in-string)
+- [567 - Permutation in String](#567---permutation-in-string) <br/>
+ <br/>
+  Stack
+  
+- [20 - Valid Parentheses](#20---valid-parentheses)
+- [155 - Min Stack](#155---min-stack)
+- [150 - Evaluate Reverse Polish Calculation](#150---evaluate-reverse-polish-calculation)  <br/>
+ <br/>
+  Binary Search
+  
+- [704 - Binary Search](#704---binary-search)
+- [153 - Find  Minimum in Sorted Array](#153---find -minimum-in-sorted-array)
+- [33 - Search in Sorted Array](#33---search-in-sorted-array)  <br/>
+<br/>
+  Linked List
+  
+- [141 - Linked List Cycle](#141---linked-list-cycle)
+- [206 - Reversed Linked List](#206---reversed-linked-list)
+- [21 - Merge Two Sorted Lists](#21---merge-two-sorted-lists)
+- [143 - Reorder List](#143---reorder-list)
+- [19 - Remove nth node from the end of list](#19---remove-nth-node-from-the-end-of-list)   <br/>
+
 
 ## 217 - Contains Duplicate
 **brute force** : run each nums in num and then run through the rest nums and compare </br>
@@ -378,3 +399,167 @@ class Solution:
 array2 = [0] * 26 # 一個array裡面26個元素都是0
 ord(s1[i]) - ord("a") # 計算ASC碼
 ```
+
+## 20 - Valid Parentheses
+**brute force** :
+- 每次都嘗試刪掉所有合法的 pair
+- 如果最後整個字串都被「清空」→ 是有效的
+- 否則 → 有多餘或錯配的括號
+```python
+def isValid(s: str) -> bool:
+    prev = None
+    while s != prev:
+        prev = s
+        s = s.replace("()", "").replace("{}", "").replace("[]", "")
+    return s == ""
+```
+⏳ **time complexity**: O(n^2) </br>
+**Solution**: </br> 
+**解題思路** ：使用stack資料結構，後進先出
+- 如果屬於前一半的符號，就存進stack
+- 如果碰到後一半的，就去比對stack的最後一個
+⏳ **time complexity**: O(n) where n is the length </br>
+```python
+return True if not stack else False # 如果stack是負的，就return True
+```
+
+## 155 - Min Stack
+**brute force** :
+- 如果要查找最小值一定要loop全部
+⏳ **time complexity**: O(n) </br>
+**Solution**: </br> 
+**解題思路** ：使用stack資料結構，後進先出
+- 創造兩個stack，一個儲存原本的值，一個儲存到目前為止的最小值
+⏳ **time complexity**: O(1) where n is the length </br>
+```python
+val = val if not self.minStack else min(self.minStack[-1], val) # A if condition else B 為python的三元運算子
+```
+
+## 150 - Evaluate Reverse Polish Calculation
+**brute force** :
+- 從左到右掃描 tokens
+- 每當發現一個運算子 + - * /：取出它前面兩個操作數（index i-2, i-1）計算結果
+- 將三個 token 位置：[a, b, op] 替換成 result
+- 重新從頭開始（因為整個 tokens 變短了）
+- 重複這過程直到只剩一個元素
+⏳ **time complexity**: O(n^2) 因為每次都要重新建立一個n長度的陣列，建立n次</br>
+**Solution**: </br> 
+**解題思路** ：使用stack資料結構，後進先出
+- 先把數字擺進去stack，碰到計算符號就依序拿出來計算
+⏳ **time complexity**: O(n) where n is the length </br>
+```python
+int(num) # 把num變成integer which means rounded to zero
+```
+
+## 704 - Binary Search
+**brute force** :
+- 從左到右去檢查
+⏳ **time complexity**: O(n) 因為每次都要重新建立一個n長度的陣列，建立n次</br>
+**Solution**: </br> 
+**解題思路** ：
+- Binary Search
+⏳ **time complexity**: O(logn) where n is the length </br>
+
+## 153 - Find  Minimum in Sorted Array
+**brute force** :
+- 逐一檢查
+⏳ **time complexity**: O(n)</br>
+**Solution**: </br> 
+**解題思路** ：
+-用binary search去檢查中間值
+⏳ **time complexity**: O(logn) where n is the length </br>
+
+## 33 - Search in Sorted Array
+**brute force** :
+- 逐一檢查
+⏳ **time complexity**: O(n)</br>
+**Solution**: </br> 
+**解題思路** ：
+-用binary search去檢查中間值
+⏳ **time complexity**: O(logn) where n is the length </br>
+
+## 141 - Linked List Cycle
+**Solution**: </br> 
+**解題思路** ：Linked List
+- 用快慢指針法，如果有cycle的話，兩個指針最終一定會重疊
+⏳ **time complexity**: O(n) where n is the length 但最重要的是空間複雜度只有O(1)不需要額外的空間去儲存 </br>
+
+## 206 - Reversed Linked List
+**Solution**: </br> 
+**解題思路** ：Linked List
+- 從head開始出發，把head當成curr, 另外還有prev
+- 把curr.next存在temp
+- 把curr.next改成prev
+- prev變成目前的curr
+- curr則變成下一個，也就是temp
+- 直到curr變成None(while curr:)
+- return prev
+⏳ **time complexity**: O(n) where n is the length 但最重要的是空間複雜度只有O(1)不需要額外的空間去儲存 </br>
+
+## 21 - Merge Two Sorted Lists
+**Solution**: </br> 
+**解題思路** ：Linked List
+- 先設立一個dummy linked list
+- 然後依序比較list1跟list2的value
+- 讓dummy接上比較小的
+- 一直loop直到list1跟list2有一個變成空的
+- 如果還有剩下的，直接接上全部
+⏳ **time complexity**: O(n+m) where n, m are the lengths 但最重要的是空間複雜度只有O(1)不需要額外的空間去儲存 </br>
+雖然產生了一個新的「合併後的 linked list」，但你並沒有創建任何新的節點，而是重用原本的節點
+👉 所以額外空間使用是常數的 → 空間複雜度是 O(1) ✅
+```python
+dummy = ListNode() # 創造一個linked list叫做dummy
+return dummy.next #回傳不能直接回傳dummy因為dummy本身是None，是dummy.next才是整個linked list的開頭
+```
+
+## 143 - Reorder List
+**Solution**: </br> 
+**解題思路** ：Linked List
+- 分成三個部分：1) 用快慢指針法找出中間的node 2) 把後半部分的list reverse 3)把前後兩個list合併
+```python
+class Solution:
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        # find the middle one using fast/slow pointers:
+        slow, fast = head, head.next
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        # reverse the second half
+        second = slow.next
+        slow.next = None # separate the first half from the second half
+        prev = None
+        while second:
+            temp = second.next
+            second.next = prev
+            prev = second
+            second = temp
+
+        # merge two halves
+        first, second = head, prev
+        while second:
+            temp1, temp2 = first.next, second.next
+            first.next = second
+            second.next = temp1
+            first, second = temp1, temp2
+```
+⏳ **time complexity**: O(n+m) where n, m are the lengths 但最重要的是空間複雜度只有O(1)不需要額外的空間去儲存 </br>
+雖然產生了一個新的「合併後的 linked list」，但你並沒有創建任何新的節點，而是重用原本的節點
+👉 所以額外空間使用是常數的 → 空間複雜度是 O(1) ✅
+
+## 19 - Remove nth node from the end of list
+**Solution**: </br> 
+**解題思路** ：Linked List
+- 分成三個部分：1) 先求出總共有多少個 2)走到那一步的時候就接上別的節點
+
+⏳ **time complexity**: O(n) 但最重要的是空間複雜度只有O(1)不需要額外的空間去儲存 </br>
+雖然產生了一個新的「合併後的 linked list」，但你並沒有創建任何新的節點，而是重用原本的節點
+👉 所以額外空間使用是常數的 → 空間複雜度是 O(1) ✅
+```python
+curr = head # otherwise you will move head 要小心不要直接用head去移。不然你就會已經走完整條list
+        while curr:
+            index += 1
+            curr = curr.next
+```
+
+
