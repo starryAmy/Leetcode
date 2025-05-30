@@ -42,6 +42,15 @@
 - [21 - Merge Two Sorted Lists](#21---merge-two-sorted-lists)
 - [143 - Reorder List](#143---reorder-list)
 - [19 - Remove nth node from the end of list](#19---remove-nth-node-from-the-end-of-list)   <br/>
+<br/>
+  Trees
+  
+- [226 - Invert Binary Tree](#226---invert-binary-tree)
+- [104 - Maximum Depth of Binary Tree](#104---maximum-depth-of-binary-tree)
+- [100 - Same Tree](#100---same-tree)
+- [572 - Subtree of Another Tree](#572---subtree-of-another-tree)
+- [19 - Remove nth node from the end of list](#19---remove-nth-node-from-the-end-of-list)   <br/>
+
 
 
 ## 217 - Contains Duplicate
@@ -562,4 +571,120 @@ curr = head # otherwise you will move head 要小心不要直接用head去移。
             curr = curr.next
 ```
 
+## 226 - Invert Binary Tree
+**Solution**: </br> 
+**解題思路** ：DFS
+- 先交換左節點還有右節點
+- 使用遞迴法繼續找左邊的節點
+- 使用遞迴法繼續找右邊的節點
+- 回傳已經反轉的tree
 
+⏳ **time complexity**: 
+| 條件       | 時間複雜度 | 空間複雜度         |
+| -------- | ----- | ------------- |
+| 所有情況     | O(n)  | O(h)，h = 樹的高度 |
+| 最壞情況（鏈）  | O(n)  | O(n)          |
+| 最佳情況（平衡） | O(n)  | O(log n)      |
+
+```python
+class Solution(object):
+    def invertTree(self, root):
+        """
+        :type root: Optional[TreeNode]
+        :rtype: Optional[TreeNode]
+        """
+        # we use DFS method
+        if not root:
+            return None
+        temp = root.left
+        root.left = root.right
+        root.right = temp # exchange left and right node
+        self.invertTree(root.left) # keep exploring left node
+        self.invertTree(root.right) # keep exploring right node
+        return root # return the inverted tree
+```
+
+## 104 - Maximum Depth of Binary Tree
+**Solution**: </br> 
+**解題思路** ：DFS
+- 遞迴法base: 如果沒有root回傳0
+- 使用遞迴法每一層都會+1
+
+⏳ **time complexity**: 
+遞迴會佔用呼叫堆疊空間（call stack）
+最壞情況（例如完全偏向左或右的樹，像鏈條）：高度 h = n ⇒ 空間複雜度 = O(n)
+最佳情況（完全平衡的樹）：高度 h = log n ⇒ 空間複雜度 = O(log n)
+
+```python
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        # DFS recursive
+        if not root:
+            return 0
+        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+```
+
+## 100 - Same Tree
+**Solution**: </br> 
+**解題思路** ：DFS
+- 遞迴法base: 如果沒有p跟q就回傳true，如果只有一邊有或兩邊值不一樣就回傳false
+- 使用遞迴法去確認每一個節點
+
+⏳ **time complexity**: 
+遞迴會佔用呼叫堆疊空間（call stack）
+最壞情況（例如完全偏向左或右的樹，像鏈條）：高度 h = n ⇒ 空間複雜度 = O(n)
+最佳情況（完全平衡的樹）：高度 h = log n ⇒ 空間複雜度 = O(log n)
+
+```python
+class Solution:
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        # iterate all nodes in p and q
+        # compare values
+        if not p and not q:
+            return True
+        if not p or not q or p.val != q.val:
+            return False
+        
+        return (self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right))
+```
+
+## 572 - Subtree of Another Tree
+**Solution**: </br> 
+**解題思路** ：DFS
+- 建立一個檢查兩個節點是否相同的function
+- 使用遞迴法先檢查root/subRoot
+- 如果沒有的話繼續檢查root.left/subRoot 以及 root.right/subRoot
+
+⏳ **time complexity**: O(m*n)
+📌 為什麼是 O(m * n)？
+來拆解兩個函式：
+1. isSubtree(root, subRoot)
+對 root 的每一個節點都呼叫一次 sameTree所以最多會呼叫 sameTree n 次
+2. sameTree(s, t)
+每次呼叫都會比對 subRoot 裡的整棵樹（最多 m 個節點）
+單次比對需要 O(m) 時間
+✅ 所以總時間 = n * m ⇒ O(n * m)
+
+```python
+class Solution:   
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        # we need a helper function - sameTree
+        # check from the root if these two are the same tree
+        # if not, go down to the right node or left node to check
+        if not subRoot: # if subRoot is empty, return true
+            return True
+        if not root: # if Root is empty, return false
+            return False
+
+        if self.sameTree(root, subRoot):
+            return True
+        else: # if it's not equal, go down to the next layer
+            return (self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot))
+
+    def sameTree(self, s, t):
+        if not s and not t:
+            return True
+        if s and t and s.val == t.val:
+            return(self.sameTree(s.left, t.left) and self.sameTree(s.right, t.right))
+        return False
+```
